@@ -1,0 +1,54 @@
+body {
+    font: 24pt 'brokenConsole';
+    background-color: hsl(47, 52%, 75%);
+
+    color: hwb(28 29% 29%);
+}
+
+#title {
+    font-size: 32pt;
+    text-align: center;
+    text-decoration: underline;
+}
+
+
+.divider {
+    width: 100%;
+    border: none;
+    border-top: 4px dotted hwb(28 29% 29%);
+    margin: 20px 0;
+}
+
+#instructions {
+    text-align: center;
+}
+
+.main{
+    display: flex;
+    justify-content: center;
+    height: 100h;
+}
+.button {
+    background-color:hwb(28 29% 29%);
+
+    border: none;
+    color: white;
+    padding: 16px;
+    margin: 16px 16px 16px;
+    display: inline-block;
+    font: 18pt 'brokenConsole';
+
+    cursor: pointer;
+    border-radius: 20px;
+
+
+
+}
+.button:hover {
+    background-color: hwb(45 41% 11%); /* Change to a lighter color */
+}
+
+.imageOfButton{
+    width: 100px;
+    height: 100px;
+}

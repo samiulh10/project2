@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+    <head>
+        <title>Match 'Em!</title>
+        
+        <style>
+            @font-face {
+                font-family: 'brokenConsole'; /* By: Arterfak Project*/
+                src: url("fonts/broken_console.ttf") format('truetype')
+            }
+            
+        </style>
+
+        <link rel = "stylesheet" href = "seperate_css.css">
+        <script src = "utility.js"></script>
+
+        <script>
+            const catImages = ["fancycat.png", "flop.jpeg", "flop2.png", "floppinal.jpg", "gleep_glorp.png", "smug_cat.png", "sog.png", "sog2.jpeg"];
+            let imageButtons;
+            
+            let instructionsDiv;
+            let gameCardsDiv;
+
+            let selectedImages = new Array();
+            let selectedButtons = new Array();
+            let finishedPairs = new Array();
+
+            function init(){
+                instructionsDiv = document.getElementById("instructions");
+                gameCardsDiv = document.getElementById("gameCards");
+
+
+                makeImageButtons();
+                showWhichSection("gameCards");
+
+                // setTimeout(() => {
+                //     removeCurrentImageButtons();
+                //     console.log(imageButtons);
+                // }, 1000);
+
+                // sleep(10000);
+
+                // console.log("124322");
+
+            }
+
+            let showWhichSection = (which) => {
+                if (which === "instructions"){
+                    instructionsDiv.style.display = 'block';
+                    gameCardsDiv.style.display = 'none';
+                }
+                else if (which === "gameCards"){
+                    gameCardsDiv.style.display = 'block';
+                    instructionsDiv.style.display = 'none';
+                }
+            }
+
+            let makeImageButtons = () => {
+                (imageButtons && imageButtons.length > 0) ? (removeCurrentImageButtons()) : ("");
+
+                if(imageButtons && imageButtons.length > 0) {
+                    removeCurrentImageButtons();
+                    
+                }
+
+                imageButtons = new Array(4).fill().map(() => new Array(4).fill().map(() => ""));
+
+                let holdImageCount = catImages.concat(catImages); //hehe, get it... like, conCAT... heh...
+
+                for (let i = 0; i < imageButtons.length; i++) {
+                    for (let j = 0; j < imageButtons[i].length; j++) {
+                        let k = randomNum = parseInt(Math.random() * holdImageCount.length) + 0;
+
+                        //create base button
+                        let newImageButton = document.createElement("button");
+                        newImageButton.className = "button";
+                        newImageButton.id = `imageButton${parseInt(j + i * 4)}`;
+
+                        //create image part
+                        let image = document.createElement("img")
+                        image.className = "imageOfButton";
+                        image.id = `imageOfButton${parseInt(j + i * 4)}`;
+
+                        image.src = "images/" + holdImageCount[k];
+
+                        newImageButton.onclick = function() {
+                            buttonClicked(newImageButton.id, image.src);
+                        };
+
+                        newImageButton.appendChild(image); //add image to base button
+
+                        //adding button to actual div and array for ease of use later
+                        document.getElementById(`row${i}`).appendChild(newImageButton);
+                        imageButtons[i][j] = document.getElementById(newImageButton.id);
+                        
+                        holdImageCount.splice(k, 1);
+                    }
+                }
+            }
+
+            let removeCurrentImageButtons = () => {
+                for (let i = 0; i < imageButtons.length; i++) {
+                    for (let j = 0; j < imageButtons[i].length; j++) {
+                        imageButtons[i][j].remove();
+                    }
+                }
+
+            }
+
+            let buttonClicked = (button, image) => {
+
+                document.getElementById("totalClicks").innerHTML = parseInt(document.getElementById("totalClicks").innerHTML) + 1;
+                
+                if(selectedButtons.length < 1){
+                    updateSelection(button, image);
+                }
+                else if ((selectedButtons.length === 1) && (selectedButtons[0] != button)){
+                    updateSelection(button, image);
+
+                    if (selectedImages.length === 2){
+                        if (selectedImages[0] === selectedImages[1]){
+                            console.log("tru33e");
+                        }
+                        else console.log("FALSER");
+    
+                        removeSelection();
+                    }
+                }
+
+                console.log(selectedButtons.length);
+
+            }
+
+            let updateSelection = (button, image) => {
+                selectedButtons.push(button);
+                selectedImages.push(image);
+
+            }
+
+            let removeSelection = () => {
+                for(let i = 0; i < 2; i++){
+                    selectedImages.splice(0, 1);
+                    selectedButtons.splice(0, 1);
+                }
+
+            }
+
+            let sleep = (ms) => { //from matthew
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }   
+
+        </script>
+    </head>
+
+    <body onload = "init();">
+		<div id = "title">Match 'Em!</div>
+        
+        <hr class = "divider">
+
+        <div class = "main">
+            <div id = "instructions">
+                <span>
+                    Welcome to Match 'Em!' <br> <br>
+                    Your job is to match all the image pairs<br> <br>
+                    in the least amount of time possible! <br> <br>
+                    The computer is watching your every move...
+                </span>
+                <br>
+                <button class = "button" onclick = 'showWhichSection("gameCards")'>ok!</button>
+
+            </div>
+
+            <div id = "gameCards">
+                <span>-Total Clicks: </span> <span id = "totalClicks">0</span> <br>
+
+                <div id = "row0"></div>
+                <div id = "row1"></div>
+                <div id = "row2"></div>
+                <div id = "row3"></div>
+            </div>
+        </div>
+
+    </body>
+    </html>
